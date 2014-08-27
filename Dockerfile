@@ -11,7 +11,7 @@ RUN apt-get install -y openssh-server
 RUN mkdir -p /var/run/sshd
 
 # Install JDK 7 (latest edition)
-RUN apt-get install -y --no-install-recommends openjdk-7-jdk
+RUN apt-get install -y --no-install-recommends default-jdk
 
 # Add user jenkins to the image
 RUN adduser --quiet jenkins
