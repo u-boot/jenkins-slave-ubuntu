@@ -1,6 +1,6 @@
-Docker Images Project
-=====================
+Jenkins Slave Docker container
+==============================
 
-Contains various [Docker][1] build files for creating Docker images (base images, intermediate images, etc.). Each folder is designated to one particular image, and has a Dockerfile (besides other build related stuff). Every Dockerfile is well commented and should be consulted for more information what it represents.
+Based on https://github.com/thaeli/docker-images
 
-[1]: http://docker.io
+A Jenkins Slave for [Jenkins Docker Plugin](https://wiki.jenkins-ci.org/display/JENKINS/Docker+Plugin) using Ubuntu 14.04 Trusty.
