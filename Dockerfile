@@ -1,6 +1,6 @@
 # This Dockerfile is used to build an image containing basic stuff to be used as a Jenkins slave build node.
 FROM ubuntu:14.04
-MAINTAINER Dr. Stefan Schimanski <stefan.schimanski@gmail.com>
+MAINTAINER shayashibara <meikyowise@gmail.com>
 
 RUN apt-get update
 
