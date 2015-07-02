@@ -12,7 +12,7 @@ RUN mkdir -p /var/run/sshd
 RUN apt-get install -y --no-install-recommends default-jdk
 
 # Install utilities
-RUN apt-get install -y git wget python-virtualenv python-pip build-essential python-dev
+RUN apt-get install -y git wget curl python-virtualenv python-pip build-essential python-dev
 
 # Add user jenkins to the image
 RUN adduser --quiet jenkins
