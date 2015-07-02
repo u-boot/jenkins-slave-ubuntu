@@ -1,18 +1,12 @@
 # This Dockerfile is used to build an image containing basic stuff to be used as a Jenkins slave build node.
-FROM ubuntu:14.04
+FROM php:5.6
 MAINTAINER shayashibara <meikyowise@gmail.com>
 
-RUN apt-get update
-
-# Install a basic SSH server
-RUN apt-get install -y openssh-server
+RUN apt-get update && apt-get install -y openssh-server git wget curl python-virtualenv python-pip build-essential python-dev
 RUN mkdir -p /var/run/sshd
 
 # Install JDK 7 (latest edition)
 RUN apt-get install -y --no-install-recommends default-jdk
-
-# Install utilities
-RUN apt-get install -y git wget curl python-virtualenv python-pip build-essential python-dev
 
 # Add user jenkins to the image
 RUN adduser --quiet jenkins
