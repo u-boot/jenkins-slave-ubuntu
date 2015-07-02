@@ -2,7 +2,7 @@
 FROM php:5.6
 MAINTAINER shayashibara <meikyowise@gmail.com>
 
-RUN apt-get update && apt-get install -y openssh-server git wget curl python-virtualenv python-pip build-essential python-dev
+RUN apt-get update && apt-get install -y openssh-server git wget curl sudo python-virtualenv python-pip build-essential python-dev
 RUN mkdir -p /var/run/sshd
 
 # Install JDK 7 (latest edition)
