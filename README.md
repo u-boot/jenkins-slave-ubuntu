@@ -8,4 +8,4 @@ A Jenkins Slave for [Jenkins Docker Plugin](https://wiki.jenkins-ci.org/display/
 - tags
 
 `latest`: basic ubuntu trusty image.  
-`php`: baseed on official `php:5.6` image and including composer. 
+`php`: based on official `php:5.6` image and including composer. 
