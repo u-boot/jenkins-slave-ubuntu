@@ -22,5 +22,5 @@ docker pull shayashibara/jenkins-slave-ubuntu
 ##  tags
 
 `latest`: basic ubuntu trusty image.  
-`php`: based on official `php:5.6` image and including composer. 
+`php`: based on official `php:5.6` image and including composer.   
 `nodejs`: based on ubuntu trusty image with node and npm.
