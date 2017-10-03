@@ -43,9 +43,16 @@ RUN apt-get install -y qemu-system-arm
 RUN apt-get install -y dosfstools
 RUN apt-get install -y e2fsprogs
 RUN apt-get install -y sudo
+RUN apt-get install -y iputils-ping
+RUN apt-get install -y picocom
+RUN apt-get install -y curl
+RUN apt-get install -y libusb-1.0-0-dev
+RUN apt-get install -y libudev-dev
 
 # Add user jenkins to the image
 RUN adduser --quiet jenkins
+RUN adduser jenkins dialout
+RUN adduser jenkins plugdev
 
 # Create the buildman config file
 RUN echo -e "[toolchain]\nroot = /usr" > ~jenkins/.buildman
@@ -66,9 +73,24 @@ RUN sed -i 's|session    required     pam_loginuid.so|session    optional     pa
 # Standard SSH port
 EXPOSE 22
 
+# build sunxi-tools for Allwinner targets
+RUN git clone --depth=1 https://github.com/linux-sunxi/sunxi-tools sunxi-tools --branch v1.4
+RUN cd sunxi-tools && make && make install && cd ..
+
+# Build imx_usb_loader for i.MX6/7 based targets
+RUN git clone --depth=1 https://github.com/boundarydevices/imx_usb_loader.git imx_usb_loader
+RUN cd imx_usb_loader && make && make install && cd ..
+
+# Build the ykush helpers
+RUN git clone --depth=1 https://github.com/Yepkit/ykush.git ykush
+RUN cd ykush && ./build.sh && ./install.sh && cd ..
+
 # Clean up
 RUN rm gcc-linaro-6.3.1-2017.02-x86_64_aarch64-linux-gnu.tar.xz
 RUN rm gcc-linaro-6.3.1-2017.02-x86_64_arm-linux-gnueabihf.tar.xz
 RUN apt-get clean
+RUN rm -r sunxi-tools
+RUN rm -r imx_usb_loader
+RUN rm -r ykush
 
 CMD ["/usr/sbin/sshd", "-D"]
