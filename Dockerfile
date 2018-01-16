@@ -30,6 +30,8 @@ RUN tar -C /opt -xf gcc-linaro-6.3.1-2017.02-x86_64_arm-linux-gnueabihf.tar.xz
 RUN apt-get install -y python-dev
 RUN apt-get install -y swig
 RUN apt-get install -y python-pytest
+RUN apt-get install -y python-pip
+RUN apt-get install -y virtualenv
 RUN apt-get install -y libsdl1.2-dev
 RUN apt-get install -y libssl-dev
 RUN apt-get install -y bc
@@ -55,11 +57,12 @@ RUN adduser jenkins dialout
 RUN adduser jenkins plugdev
 
 # Create the buildman config file
-RUN echo -e "[toolchain]\nroot = /usr" > ~jenkins/.buildman
-RUN echo -e "aarch64 = /tmp/gcc-linaro-6.3.1-2017.02-x86_64_aarch64-linux-gnu" >> ~jenkins/.buildman
-RUN echo -e "arm = /tmp/gcc-linaro-6.3.1-2017.02-x86_64_arm-linux-gnueabihf" >> ~jenkins/.buildman
-RUN echo -e "arc = /tmp/arc_gnu_2016.09_prebuilt_uclibc_le_archs_linux_install" >> ~jenkins/.buildman
-RUN echo -e "\n[toolchain-alias]\nsh = sh4\nopenrisc = or32" >> ~jenkins/.buildman
+RUN /bin/echo -e "[toolchain]\nroot = /usr" > ~jenkins/.buildman
+RUN /bin/echo -e "aarch64 = /tmp/gcc-linaro-6.3.1-2017.02-x86_64_aarch64-linux-gnu" >> ~jenkins/.buildman
+RUN /bin/echo -e "arm = /tmp/gcc-linaro-6.3.1-2017.02-x86_64_arm-linux-gnueabihf" >> ~jenkins/.buildman
+RUN /bin/echo -e "arc = /tmp/arc_gnu_2016.09_prebuilt_uclibc_le_archs_linux_install" >> ~jenkins/.buildman
+RUN /bin/echo -e "\n[toolchain-alias]\nsh = sh4" >> ~jenkins/.buildman
+RUN chown jenkins:jenkins ~jenkins/.buildman
 
 # Add user jenkins to sudoers with NOPASSWD
 RUN echo "jenkins ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
