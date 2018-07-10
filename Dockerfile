@@ -26,6 +26,12 @@ RUN wget http://releases.linaro.org/components/toolchain/binaries/6.3-2017.02/ar
 RUN tar -C /opt -xf gcc-linaro-6.3.1-2017.02-x86_64_aarch64-linux-gnu.tar.xz
 RUN tar -C /opt -xf gcc-linaro-6.3.1-2017.02-x86_64_arm-linux-gnueabihf.tar.xz
 
+# Manually install the ARC and RiscV toolchains
+RUN wget https://github.com/foss-for-synopsys-dwc-arc-processors/toolchain/releases/download/arc-2016.09-release/arc_gnu_2016.09_prebuilt_uclibc_le_archs_linux_install.tar.gz
+RUN tar -C /opt -xf arc_gnu_2016.09_prebuilt_uclibc_le_archs_linux_install.tar.gz
+RUN wget https://github.com/PkmX/riscv-prebuilt-toolchains/releases/download/20180111/riscv32-unknown-elf-toolchain.tar.gz
+RUN tar -C /opt -xf riscv32-unknown-elf-toolchain.tar.gz
+
 # Install U-Boot build and test dependencies
 RUN apt-get install -y python-dev
 RUN apt-get install -y swig
@@ -50,6 +56,9 @@ RUN apt-get install -y picocom
 RUN apt-get install -y curl
 RUN apt-get install -y libusb-1.0-0-dev
 RUN apt-get install -y libudev-dev
+RUN apt-get install -y lzop
+RUN apt-get install -y flex bison
+RUN apt-get install -y python-coverage
 
 # Add user jenkins to the image
 RUN adduser --quiet jenkins
@@ -58,9 +67,11 @@ RUN adduser jenkins plugdev
 
 # Create the buildman config file
 RUN /bin/echo -e "[toolchain]\nroot = /usr" > ~jenkins/.buildman
-RUN /bin/echo -e "aarch64 = /tmp/gcc-linaro-6.3.1-2017.02-x86_64_aarch64-linux-gnu" >> ~jenkins/.buildman
-RUN /bin/echo -e "arm = /tmp/gcc-linaro-6.3.1-2017.02-x86_64_arm-linux-gnueabihf" >> ~jenkins/.buildman
-RUN /bin/echo -e "arc = /tmp/arc_gnu_2016.09_prebuilt_uclibc_le_archs_linux_install" >> ~jenkins/.buildman
+RUN /bin/echo -e "aarch64 = /opt/gcc-linaro-6.3.1-2017.02-x86_64_aarch64-linux-gnu" >> ~jenkins/.buildman
+RUN /bin/echo -e "arm = /opt/gcc-linaro-6.3.1-2017.02-x86_64_arm-linux-gnueabihf" >> ~jenkins/.buildman
+RUN /bin/echo -e "arc = /opt/arc_gnu_2016.09_prebuilt_uclibc_le_archs_linux_install" >> ~jenkins/.buildman
+RUN /bin/echo -e "host = /usr" >> ~jenkins/.buildman
+RUN /bin/echo -e "\n[toolchain-prefix]\nriscv = /opt/riscv32-unknown-elf/bin/riscv32-unknown-elf-" >> ~jenkins/.buildman;
 RUN /bin/echo -e "\n[toolchain-alias]\nsh = sh4" >> ~jenkins/.buildman
 RUN chown jenkins:jenkins ~jenkins/.buildman
 
@@ -91,6 +102,8 @@ RUN cd ykush && ./build.sh && ./install.sh && cd ..
 # Clean up
 RUN rm gcc-linaro-6.3.1-2017.02-x86_64_aarch64-linux-gnu.tar.xz
 RUN rm gcc-linaro-6.3.1-2017.02-x86_64_arm-linux-gnueabihf.tar.xz
+RUN rm arc_gnu_2016.09_prebuilt_uclibc_le_archs_linux_install.tar.gz
+RUN rm riscv32-unknown-elf-toolchain.tar.gz
 RUN apt-get clean
 RUN rm -r sunxi-tools
 RUN rm -r imx_usb_loader
